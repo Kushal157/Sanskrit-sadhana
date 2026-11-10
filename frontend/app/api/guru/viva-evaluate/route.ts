@@ -3,7 +3,12 @@
  * Handles Viva mode pronunciation evaluation
  */
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8001";
+// In Vercel Services, BACKEND_URL is injected at runtime via the service binding.
+// Falls back to NEXT_PUBLIC_BACKEND_URL or localhost for local development.
+function getBackendBaseUrl(): string {
+  const base = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8001";
+  return base.endsWith("/") ? base : `${base}/`;
+}
 
 export interface VivaEvaluateRequest {
   shloka_text: string;
@@ -36,8 +41,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // Forward request to Python backend
-    const backendResponse = await fetch(`${BACKEND_URL}/viva-evaluate`, {
+    // Forward request to Python backend using bound internal service URL
+    const targetUrl = new URL("viva-evaluate", getBackendBaseUrl());
+    const backendResponse = await fetch(targetUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

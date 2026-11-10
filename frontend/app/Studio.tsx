@@ -231,7 +231,10 @@ export default function Studio() {
     const [isDownloadingReport, setIsDownloadingReport] = useState(false);
     const [insightPage, setInsightPage] = useState(1);
     const insightsPerPage = 4;
-    const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8001';
+    const apiBaseUrl =
+        process.env.NEXT_PUBLIC_BACKEND_URL ??
+        process.env.NEXT_PUBLIC_API_URL ??
+        (typeof window !== 'undefined' ? '/api' : 'http://localhost:8001');
 
     const scoreSummary = results ? getScoreSummary(results.score ?? 0) : null;
     const scoreBreakdown = results ? getScoreBreakdown(results) : null;

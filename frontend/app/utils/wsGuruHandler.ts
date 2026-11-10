@@ -121,9 +121,24 @@ export class GuruWebSocketHandler {
   connect(): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) return;
 
-    const wsUrl = this.backendUrl
-      .replace(/^http/, 'ws')
-      .replace(/\/+$/, '') + '/ws/guru-teaching';
+    let base = this.backendUrl;
+    if (
+      !base.startsWith('http://') &&
+      !base.startsWith('https://') &&
+      !base.startsWith('ws://') &&
+      !base.startsWith('wss://')
+    ) {
+      if (typeof window !== 'undefined') {
+        const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const cleanPath = base.startsWith('/') ? base : `/${base}`;
+        base = `${proto}//${window.location.host}${cleanPath}`;
+      } else {
+        base = 'ws://localhost:8001';
+      }
+    }
+
+    const wsUrl =
+      base.replace(/^http/, 'ws').replace(/\/+$/, '') + '/ws/guru-teaching';
 
     this.ws = new WebSocket(wsUrl);
     this.ws.binaryType = 'arraybuffer';

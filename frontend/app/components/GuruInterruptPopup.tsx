@@ -60,7 +60,8 @@ export function GuruInterruptPopup({
     const fetchAndPlay = async () => {
       setAudioState('loading');
       try {
-        const url = `${backendUrl}/reference-audio/${shlokaId}/${interrupt.ref_idx}?window_ms=350`;
+        const base = backendUrl.replace(/\/+$/, '');
+        const url = `${base}/reference-audio/${shlokaId}/${interrupt.ref_idx}?window_ms=350`;
         const resp = await fetch(url);
 
         if (!resp.ok || resp.headers.get('X-Reference-Status') === 'not-cached') {

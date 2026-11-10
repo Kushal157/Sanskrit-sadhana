@@ -48,6 +48,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.middleware("http")
+async def handle_api_prefix(request, call_next):
+    """
+    Support both direct root paths (used by internal service bindings)
+    and /api-prefixed paths (used by public rewrites and reverse proxies).
+    """
+    path = request.scope.get("path", "")
+    if path.startswith("/api/"):
+        request.scope["path"] = path[4:]
+    response = await call_next(request)
+    return response
+
 # ---------------------------------------------------------------------------
 # Model configuration
 # ---------------------------------------------------------------------------
@@ -627,6 +640,7 @@ def _transcribe_pcm_buffer(pcm_bytes: bytes, reference_text: str) -> str:
 
 
 @app.websocket("/ws/guru-teaching")
+@app.websocket("/api/ws/guru-teaching")
 async def ws_guru_teaching(websocket: WebSocket) -> None:
     """
     Real-time Guru-Shishya teaching WebSocket.
