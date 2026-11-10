@@ -1,0 +1,25 @@
+# Git & environments
+.git
+.venv
+.venv/**
+frontend/node_modules
+frontend/node_modules/**
+frontend/.next
+frontend/.next/**
+
+# Python cache & temp files
+__pycache__
+__pycache__/**
+*.py[cod]
+*$py.class
+backend/__pycache__
+backend/__pycache__/**
+backend/temp_uploads
+backend/temp_uploads/**
+backend/ref_audio_cache
+backend/ref_audio_cache/**
+backend/whisper_cache
+backend/whisper_cache/**
+
+# Logs
+*.log

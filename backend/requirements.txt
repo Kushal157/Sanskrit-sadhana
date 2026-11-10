@@ -1,16 +1,14 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+
 fastapi
 uvicorn[standard]
 python-multipart
-openai-whisper
+torch
 numpy
 scipy
 pydantic
-transformers
-sentencepiece
 soundfile
 websockets
 faster-whisper
 silero-vad
 pydub
-# INT8 quantization (optional - set CT2_WHISPER_MODEL_PATH env var to activate)
-# ctranslate2
